@@ -1,0 +1,4 @@
+  - name: Delete Mysql compression Software In Redhat Client
+    shell: rm -rf /etc/my.cnf {{ code_path }}/mysql_security.sh {{ code_path }}/mariadb-{{ mysql_version }}.tar.xz
+    ignore_errors: yes
+    when: ansible_os_family == "RedHat"

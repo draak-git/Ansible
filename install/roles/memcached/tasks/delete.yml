@@ -1,0 +1,4 @@
+  - name: Delete Memcached compression Software In Redhat Client
+    shell: rm -rf {{ code_path }}/memcached-{{ memcached_version }}.tar.gz {{ code_path }}/memcached-{{ memcached_version }}
+    ignore_errors: yes
+    when: ansible_os_family == "RedHat"

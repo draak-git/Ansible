@@ -1,0 +1,9 @@
+---
+- name: install haproxy
+  yum: name={{item}} state=present
+  with_items:
+  - haproxy
+- name: copy haproxy.cfg
+  template: src=haproxy.cfg.j2 dest=/etc/haproxy/haproxy.cfg owner=root group=root mode=644
+- name: start haproxy
+  service: name=haproxy state=started enabled=yes

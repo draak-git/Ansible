@@ -1,0 +1,6 @@
+- name: Install Memcached Software Depend In Redhat Client
+  yum: name={{item}} state=present
+  with_items:
+  - cyrus-sasl-devel
+  - libevent-devel
+  when: ansible_os_family == "RedHat"

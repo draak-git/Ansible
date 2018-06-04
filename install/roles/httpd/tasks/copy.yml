@@ -1,0 +1,21 @@
+  - name: Copy Apache Software To Redhat Client
+    copy: src={{ item }} dest={{ code_path }} owner=root group=root
+    with_items:
+      - httpd-{{ httpd_version }}.tar.gz
+      - libiconv-{{ libiconv_version }}.tar.gz
+    when: ansible_os_family == "RedHat"
+  - name: Create Apache Group In Redhat Client
+    group: name={{ httpd_user }} system=yes gid={{ httpd_user_id }}
+    when: ansible_os_family == "RedHat"
+  - name: Create Apache User In Redhat Client
+    user: name={{ httpd_user }} system=yes group={{ httpd_user }} uid={{ httpd_user_id }}
+    when: ansible_os_family == "RedHat"
+  - name: Copy Iconv Bin Files Directory In Redhat Client
+    template: src=libiconv_bin.sh dest=/etc/profile.d/libiconv.sh owner=root group=root mode=0644
+    when: ansible_os_family == "RedHat"
+  - name: Copy Httpd Bin Files Directory In Redhat Client
+    template: src=httpd_bin.sh dest=/etc/profile.d/httpd.sh owner=root group=root mode=0644
+    when: ansible_os_family == "RedHat"
+  - name: Copy Apache Service Script To Redhat Client For 6
+    template: src=httpd.6 dest=/etc/init.d/httpd owner=root group=root mode=0755
+    when: ansible_os_family == "RedHat"

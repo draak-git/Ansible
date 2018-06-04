@@ -1,0 +1,12 @@
+  - name: Uncompress Apr Software In Redhat Client
+    shell: tar xf {{ code_path }}/apr-{{ apr_version }}.tar.gz -C {{ code_path }}/
+    when: ansible_os_family == "RedHat"
+  - name: Uncompress Apr-util  Software In Redhat Client
+    shell: tar xf {{ code_path }}/apr-util-{{ apr_util_version }}.tar.gz -C {{ code_path }}/
+    when: ansible_os_family == "RedHat"
+  - name: Install Apr Or Apr-util  Software In Redhat Client
+    shell: cd {{ code_path }}/apr-{{ apr_version }} && ./configure --prefix={{ install_path }}/apr-{{ apr_version }} && make -j {{ ansible_processor_vcpus }} && make install && ln -s {{ install_path }}/apr-{{ apr_version }} {{ install_path }}/apr
+    when: ansible_os_family == "RedHat"
+  - name: Install Apr-util  Software In Redhat Client
+    shell: cd {{ code_path }}/apr-util-{{ apr_util_version }} && ./configure --prefix={{ install_path }}/apr-util-{{ apr_util_version }} --with-apr={{ install_path }}/apr && make -j {{ ansible_processor_vcpus }} && make install && ln -s {{ install_path }}/apr-util-{{ apr_util_version }} {{ install_path }}/apr-util
+    when: ansible_os_family == "RedHat"

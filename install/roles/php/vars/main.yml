@@ -1,0 +1,8 @@
+php_user: www
+php_user_id: 80
+httpd_user: www
+php_port: 9000
+php_version: 5.6.36
+php_fpm_log_path: /data/logs/php-fpm
+php_conf: /etc/php.d
+httpd_conf: /etc/httpd

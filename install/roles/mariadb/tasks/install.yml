@@ -1,0 +1,25 @@
+  - name: Create And Modify MariaDB Run,Tmp,Log Dir Permission In Redhat Client
+    shell: /bin/bash {{ code_path }}/mysql_mkdir.sh 
+    when: ansible_os_family == "RedHat"
+  - name: Uncompression MariaDB Software To Redhat Client
+    shell: tar xf {{ code_path }}/mariadb-{{ mysql_version }}.tar.gz -C  {{ code_path }}/
+    ignore_errors: True
+    when: ansible_os_family == "RedHat"
+  - name: Cmake Install MariaDB Database To Redhat Client
+    shell: cd {{ code_path }}/mariadb-{{ mysql_version }} && cmake -DCMAKE_INSTALL_PREFIX={{ mysql_basedir }} -DMYSQL_DATADIR={{ mysql_datadir }} -DSYSCONFDIR={{ mysql_basedir }}/etc -DMYSQL_UNIX_ADDR={{ mysql_basedir }}/run/{{ mysql_port }}.sock -DDEFAULT_CHARSET={{ mysql_charset }} -DDEFAULT_COLLATION={{ mysql_collation }} -DWITHOUT_TOKUDB=1 && make -j {{ ansible_processor_vcpus }} && make install
+    when: ansible_os_family == "RedHat"
+  - name: Copy MariaDB Config In RedHat Client
+    template: src=my.cnf dest={{ mysql_basedir }}/etc/my.cnf owner={{ mysql_user }} group={{ mysql_user }} mode=0644
+    when: ansible_os_family == "RedHat"
+  - name: Initialize MariaDB Database To Redhat Client
+    shell: touch {{ mysql_basedir }}/log/error.log && chown -R {{ mysql_user }}.{{ mysql_user }} {{ mysql_basedir }} && cd {{ mysql_basedir }} && scripts/mysql_install_db --defaults-file={{ mysql_basedir }}/etc/my.cnf --basedir={{ mysql_basedir }} --user={{ mysql_user }} --datadir={{ mysql_datadir }} --skip-name-resolve >> /dev/null 2>&1 
+    when: ansible_os_family == "RedHat"
+  - name: Start MariaDB Server In Redhat Client
+    shell: /etc/init.d/{{ mysql_port }} start && chkconfig --add {{ mysql_port }}
+    when: ansible_os_family == "RedHat"
+  - name: Start MariaDB Security Script In Redhat Client
+    shell: /bin/bash {{ code_path }}/mysql_security.sh
+    when: ansible_os_family == "RedHat"
+  - name: Add Boot Start MariaDB Service In Redhat Client
+    shell: chkconfig --level 345 {{ mysql_port }} on
+    when: ansible_os_family == "RedHat"

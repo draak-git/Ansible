@@ -1,0 +1,41 @@
+  - name: Uncompression Php Software To Redhat Client
+    shell: tar xf {{ code_path }}/php-{{ php_version }}.tar.gz -C {{ code_path }}/
+    when: ansible_os_family == "RedHat"
+  - name: Create Php Group In Redhat Client
+    shell: id {{ php_user }} || groupadd -r -g {{ php_user_id }} {{ php_user }}
+    when: ansible_os_family == "RedHat"
+  - name: Create Php User In Redhat Client
+    shell: id {{ php_user }} || useradd -g {{ php_user_id }} -r -u {{ php_user_id }} {{ php_user }}
+    when: ansible_os_family == "RedHat"
+  - name: Create php config Dir
+    file: dest={{ php_conf }} state=directory
+    when: ansible_os_family == "RedHat"
+  - name: Create php Logs Dir
+    file: dest={{ php_fpm_log_path }} state=directory
+    when: ansible_os_family == "RedHat"
+  - name: Install Mysql-devel In RedHat Client For 6
+    yum: name=mysql-devel state=present
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "6"
+  - name: Install Mysql-devel In RedHat Client For 7
+    yum: name=mariadb-devel state=present
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "7"
+  - name: Install Php Software In Redhat Client
+    shell: cd {{ code_path }}/php-{{ php_version }} && ./configure --prefix={{ install_path }}/php-{{ php_version }} --with-config-file-path=/etc --with-config-file-scan-dir=/etc/php.d --with-libxml-dir=/usr --enable-fpm --with-openssl --enable-mbstring --with-freetype-dir --with-jpeg-dir --with-png-dir --with-zlib --enable-sockets --with-mcrypt --with-bz2 --with-mysql=shared,mysqlnd && make -j {{ ansible_processor_vcpus }} && make install && ln -s {{ install_path }}/php-{{ php_version }} {{ install_path }}/php 
+  - name: Copy Php Config To Redhat Client
+    template: src=php-fpm.conf dest={{ php_conf }}/php-fpm.conf owner=root group=root mode=0644
+    when: ansible_os_family == "RedHat"
+  - name: Copy Php opcache To Redhat Client
+    template: src=php.ini dest={{ php_conf }}/ owner=root group=root mode=0644
+    when: ansible_os_family == "RedHat"
+  - name: Start Php Service In Redhat Client For 6
+    shell: /etc/init.d/php-fpm start
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "6"
+  - name: Add Boot Start Php Service In Redhat Client For 6
+    shell: chkconfig --level 345 php-fpm on
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "6"
+  - name: Start Php Service In Redhat Client For 7
+    shell: systemctl daemon-reload && systemctl start php-fpm.service
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "7"
+  - name: Add Boot Start Php Service In Redhat Client For 7
+    shell: systemctl enable php-fpm.service
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "7"

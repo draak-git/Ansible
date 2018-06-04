@@ -1,0 +1,35 @@
+---
+#- hosts: dbservers
+#  remote_user: root
+#  gather_facts: True
+#  roles:
+#    - common
+
+- hosts: dbservers
+  remote_user: root
+  gather_facts: True
+  roles:
+     - mysql
+#     - mariadb
+#     - mariadb_yum
+#     - master_slave
+
+#- hosts: memcache
+#  remote_user: root
+#  gather_facts: True
+#  roles:
+#    - memcached
+
+#- hosts: webservers
+#  remote_user: root
+#  gather_facts: True
+#  roles:
+#    - apr
+#    - pcre
+#    - httpd
+
+#- hosts: php-fpm
+#  remote_user: root
+#  gather_facts: True
+#  roles:
+#    - php

@@ -1,0 +1,6 @@
+  - name: Copy Apr Or Apr-util Software To Redhat Client
+    copy: src={{item}} dest={{code_path}}/ owner=root group=root
+    with_items:
+    - apr-{{ apr_version }}.tar.gz
+    - apr-util-{{ apr_util_version }}.tar.gz
+    when: ansible_os_family == "RedHat"

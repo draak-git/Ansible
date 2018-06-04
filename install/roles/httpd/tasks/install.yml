@@ -1,0 +1,49 @@
+  - name: Uncompress Iibiconv In Redhat Client
+    shell: tar xf {{ code_path }}/libiconv-{{ libiconv_version }}.tar.gz -C {{ code_path }}/
+    when: ansible_os_family == "RedHat"
+  - name: Install Iibiconv In Redhat Client
+    shell: cd {{ code_path }}/libiconv-{{ libiconv_version }} && ./configure --prefix={{ install_path }}/libiconv-{{ libiconv_version }} && make -j {{ ansible_processor_vcpus }} && make install && ln -s {{ install_path }}/libiconv-{{ libiconv_version }} {{ install_path }}/libiconv && ln -s {{ install_path }}/libiconv/include /usr/include/libiconv && source /etc/profile.d/libiconv.sh
+    when: ansible_os_family == "RedHat"
+  - name: Map Apache Iconv Library Ldconfig In Redhat Client
+    shell: /sbin/ldconfig
+  - name: Uncompress httpd-{{ httpd_version }} In Redhat Client
+    shell: tar xf {{ code_path }}/httpd-{{ httpd_version }}.tar.gz -C {{ code_path }}/
+    when: ansible_os_family == "RedHat"
+  - name: Install httpd-{{ httpd_version }} In Redhat Client
+    shell: cd {{ code_path }}/httpd-{{ httpd_version }} && ./configure --prefix={{ install_path }}/httpd-{{ httpd_version }} --sysconfdir={{ httpd_conf }} --with-apr={{ install_path }}/apr --with-apr-util={{ install_path }}/apr-util --with-pcre={{ install_path }}/pcre --enable-so --enable-rewrite --enable-ssl --with-zlib --enable-cgi --enable-cgid --enable-modules=most --enable-modules-shared=most --enable-mpms-shared=all --enable-mime-magic --enable-usertrack --enable-cache-disk --with-mpm=event && make -j {{ ansible_processor_vcpus }} && make install && ln -s {{ install_path }}/httpd-{{ httpd_version }} {{ install_path }}/httpd && ln -s {{ install_path }}/httpd/include /usr/include/httpd && ln -s {{ install_path }}/httpd/modules {{ httpd_conf }}/modules && source /etc/profile.d/httpd.sh
+    when: ansible_os_family == "RedHat"
+  - name: Create Apache Dir
+    file: dest={{ item }} state=directory
+    with_items:
+      - "{{ httpd_web_path }}"
+      - "{{ httpd_log }}"
+      - "{{ httpd_vhost }}"
+      - "{{ httpd_conf }}/conf.d"
+    when: ansible_os_family == "RedHat"
+  - name: Enable Apache ssl Function To Redhat Client
+    template: src=http_ssl.conf dest={{ httpd_conf }}/conf.d/00-ssl.conf owner={{ httpd_user }} group={{ httpd_user }} mode=0644
+    when: ansible_os_family == "RedHat"
+  - name: Copy Apache Config To Redhat Client
+    template: src=httpd.conf dest={{ httpd_conf }}/httpd.conf owner={{ httpd_user }} group={{ httpd_user }} mode=0644
+    when: ansible_os_family == "RedHat"
+  - name: Mapping Apache Iconv Library File In Redhat Client
+    template: src={{ item }} dest=/etc/ld.so.conf.d/
+    with_items:
+      - libiconv_lib.conf
+      - httpd_lib.conf
+    when: ansible_os_family == "RedHat"
+  - name: Mapping Apache Library In Redhat Client
+    shell: /sbin/ldconfig
+    when: ansible_os_family == "RedHat"
+  - name: Install Check Script In Redhat Client
+    template: src=index.php dest={{ httpd_vhost }} owner={{ httpd_user }} group={{ httpd_user }} mode=0644
+    when: ansible_os_family == "RedHat"
+  - name: Create Index Html To Redhat Client
+    template: src=index.html dest={{ httpd_web_path }} owner={{ httpd_user }} group={{ httpd_user }} mode=0644
+    when: ansible_os_family == "RedHat"
+  - name: Add Boot Start Apache Service In Redhat Client
+    shell: chkconfig --level 345 httpd on
+    when: ansible_os_family == "RedHat"
+  - name: Start Apache Service In Redhat Client
+    shell: /etc/init.d/httpd start
+    when: ansible_os_family == "RedHat"

@@ -1,0 +1,20 @@
+---
+- name: base
+  hosts: all
+  roles:
+  - base
+
+- name: install nginx
+  hosts: nginx
+  roles:
+  - nginx
+
+- name: install mysql
+  hosts: mysql
+  roles:
+  - nginx
+
+- name: install haproxy
+  hosts: haproxy
+  roles:
+  - haproxy

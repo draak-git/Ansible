@@ -1,0 +1,4 @@
+code_path: /usr/local/src
+install_path: /usr/local
+time_servers: 192.168.212.5
+mirrors: 192.168.212.5

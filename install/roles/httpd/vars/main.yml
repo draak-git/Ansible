@@ -1,0 +1,17 @@
+libiconv_version: 1.15
+httpd_version: 2.4.29
+apr_version: 1.5.2
+apr_util_version: 1.5.4
+pcre_version: 8.39
+httpd_conf: /etc/httpd
+httpd_web_path: /data/webroot/httpd
+httpd_vhost: /data/webroot/httpd/vhost
+httpd_log: /data/logs/httpd/
+httpd_port: 80
+httpd_status_port: 80
+httpd_user: www
+httpd_user_id: 80
+serveradmin: cn-ll@outlook.com
+zabbix_user: zabbix
+zabbix_passwd: zabbix
+mysql_address: 192.168.212.252

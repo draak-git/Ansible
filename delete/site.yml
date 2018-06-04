@@ -1,0 +1,27 @@
+---
+#- hosts: all
+#  remote_user: root
+#  gather_facts: True
+#  roles:
+#    - common
+
+- hosts: webservers
+  remote_user: root
+  gather_facts: True
+  roles:
+    - apr_delete
+    - pcre_delete
+    - apache_delete
+    - php_delete
+
+- hosts: memcache
+  remote_user: root
+  gather_facts: True
+  roles:
+    - memcached_delete
+
+- hosts: dbservers
+  remote_user: root
+  gather_facts: True
+  roles:
+    - mysql_delete

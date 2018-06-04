@@ -1,0 +1,7 @@
+memcached_user: memcached
+memcached_user_id: 121
+memcached_port: 11211
+memcached_maxconn: 1024
+memcached_cachesize: 64
+memcached_version: 1.5.7
+

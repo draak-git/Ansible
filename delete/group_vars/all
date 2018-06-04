@@ -1,0 +1,3 @@
+code_src_dir: /usr/local/src
+soft_install_dir: /usr/local
+time_servers: 192.168.212.5

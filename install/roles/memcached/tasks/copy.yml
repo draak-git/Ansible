@@ -1,0 +1,21 @@
+  - name: Copy Memcached Software To Redhat Client
+    copy: src=memcached-{{ memcached_version }}.tar.gz dest={{ code_path }}/memcached-{{ memcached_version }}.tar.gz owner=root group=root mode=0644
+    when: ansible_os_family == "RedHat"
+  - name: Copy Memcached Server To Redhat Client For 6
+    template: src=memcached.6 dest=/etc/init.d/memcached owner=root group=root mode=0755
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "6"
+  - name: Copy Memcached Server To Redhat Client For 7
+    template: src=memcached.7 dest=/usr/lib/systemd/system/memcached.service owner=root group=root mode=0644
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "7"
+  - name: Copy Memcached Lib Script To Redhat Client
+    template: src=memcached_bin.sh dest=/etc/profile.d/memcached.sh owner=root group=root mode=0644
+    when: ansible_os_family == "RedHat"
+  - name: Copy Memcached Lib Script To Redhat Client
+    template: src=memcached.sysconfig dest=/etc/sysconfig/memcached owner=root group=root mode=0644
+    when: ansible_os_family == "RedHat"
+  - name: Create Memcached Group In Redhat Client
+    group: name={{ memcached_user }} system=yes gid={{ memcached_user_id }}
+    when: ansible_os_family == "RedHat"
+  - name: Create Memcached User In Redhat Client
+    user: name={{ memcached_user }} system=yes group={{ memcached_user }} uid={{ memcached_user_id }}
+    when: ansible_os_family == "RedHat"

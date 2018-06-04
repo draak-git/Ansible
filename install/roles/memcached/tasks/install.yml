@@ -1,0 +1,24 @@
+  - name: Uncompression Memcached Software To Redhat Client
+    shell: tar xf {{ code_path }}/memcached-{{ memcached_version }}.tar.gz -C {{ code_path }}/
+    when: ansible_os_family == "RedHat"
+  - name: Install Memcached Software In Redhat Client
+    shell: cd {{ code_path }}/memcached-{{ memcached_version }} && ./configure  --prefix={{ install_path }}/memcached-{{ memcached_version }} --enable-sasl && make -j {{ ansible_processor_vcpus }} && make install && ln -s {{ install_path }}/memcached-{{ memcached_version }} {{ install_path }}/memcached
+    when: ansible_os_family == "RedHat"
+  - name: Map Mysql Library Include File In Redhat Client
+    shell: source /etc/profile.d/memcached.sh && ln -s {{ install_path }}/memcached/include /usr/include/memcached
+    when: ansible_os_family == "RedHat"
+  - name: Create Memcached Pid Dir
+    file: dest=/var/run/memcached/ state=directory
+    when: ansible_os_family == "RedHat"
+  - name: Start Memcache Service In Redhat Client For 6
+    shell: /etc/init.d/memcached start
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "6"
+  - name: Add Boot Start Memcache Service In Redhat Client For 6
+    shell: chkconfig --level 345 memcached on
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "6"
+  - name: Start Memcache Service In Redhat Client For 7
+    shell: systemctl daemon-reload && systemctl start memcached
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "7"
+  - name: Add Boot Start Memcache Service In Redhat Client For 7
+    shell: systemctl enable memcached
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "7"

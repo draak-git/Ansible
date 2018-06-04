@@ -1,0 +1,51 @@
+  - name: Create Mysql Install Dir
+    file: dest={{ mysql_datadir }} state=directory
+    when: ansible_os_family == "RedHat"
+  - name: Install Mysql-Server Software To Redhat Client For 6
+    shell: rpm -ivh {{ code_path }}/{{ item }}
+    with_items:
+      - boost-program-options-1.41.0-28.centos6-x86_64.rpm
+      - galera-25.3.19-1.rhel6.centos6-x86_64.rpm
+      - jemalloc-3.6.0-1.centos6-x86_64.rpm
+      - MariaDB-10.1.20-centos6-x86_64-client.rpm
+      - MariaDB-10.1.20-centos6-x86_64-common.rpm
+      - MariaDB-10.1.20-centos6-x86_64-compat.rpm
+      - MariaDB-10.1.20-centos6-x86_64-server.rpm
+      - perl-DBI-1.609-4.centos6-x86_64.rpm
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "6"
+  - name: Install Mysql-Server Software To Redhat Client For 7
+    shell: rpm -ivh {{ code_path }}/{{ item }}
+    with_items:
+      - boost-program-options-1.53.0-27.centos7-x86_64.rpm
+      - galera-25.3.19-1.centos7-x86_64.rpm
+      - jemalloc-3.6.0-1.centos7-x86_64.rpm
+      - MariaDB-10.1.20-centos7-x86_64-client.rpm
+      - MariaDB-10.1.20-centos7-x86_64-common.rpm
+      - MariaDB-10.1.20-centos7-x86_64-server.rpm
+      - MariaDB-10.1.20-centos7-x86_64-shared.rpm
+      - perl-Compress-Raw-Bzip2-2.061-3.centos7-x86_64.rpm
+      - perl-Compress-Raw-Zlib-2.061-4.centos7-x86_64.rpm
+      - perl-DBI-1.627-4.centos7-x86_64.rpm
+      - perl-IO-Compress-2.061-2.centos7-x86_64.rpm
+      - perl-Net-Daemon-0.48-5.centos7-x86_64.rpm
+      - perl-PlRPC-0.2020-14.centos7-x86_64.rpm
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "7"
+  - name: Copy Mysql Config To Redhat Client For 6
+    template: src=my.cnf dest=/etc/my.cnf owner=root group=root mode=0644
+    notify: 
+      - restart mysql
+    when: ansible_os_family == "RedHat" ansible_distribution_major_version == "6"
+  - name: Copy Mysql Config To Redhat Client For 7
+    template: src=my.cnf dest=/etc/my.cnf owner=root group=root mode=0644
+    notify: 
+      - restart mariadb
+    when: ansible_os_family == "RedHat" ansible_distribution_major_version == "7"
+  - name: Start Mysql Server In Redhat Client For 7
+    service: name=mariadb enabled=true state=started 
+    when: ansible_os_family == "RedHat" ansible_distribution_major_version == "7"
+  - name: Start Mysql Server In Redhat Client For 6
+    service: name=mysql enabled=true state=started 
+    when: ansible_os_family == "RedHat" ansible_distribution_major_version == "6"
+  - name: Start Mysql Security Script In Redhat Client
+    shell: /bin/bash {{ code_path }}/mysql_security.sh
+    when: ansible_os_family == "RedHat"

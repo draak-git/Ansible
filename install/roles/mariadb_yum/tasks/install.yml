@@ -1,0 +1,28 @@
+  - name: Create Mysql Install Dir
+    file: dest={{ mysql_datadir }} state=directory owner={{ mysql_user }} group={{ mysql_user }}
+    when: ansible_os_family == "RedHat"
+  - name: Install Mysql-Server Software To Redhat Client For 6
+    yum: name=MariaDB-server state=present
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "6"
+  - name: Install Mysql-Server Software To Redhat Client For 7
+    yum: name=mariadb-server state=present
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "7"
+  - name: Copy Mysql Config To Redhat Client For 6
+    template: src=my.cnf dest=/etc/my.cnf owner=root group=root mode=0644 backup=True
+    notify: 
+      - restart mysql
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "6"
+  - name: Copy Mysql Config To Redhat Client For 7
+    template: src=my.cnf dest=/etc/my.cnf owner=root group=root mode=0644 backup=True
+    notify: 
+      - restart mariadb
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "7"
+  - name: Start Mysql Server In Redhat Client For 7
+    service: name=mariadb enabled=true state=restarted 
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "7"
+  - name: Start Mysql Server In Redhat Client For 6
+    service: name=mysql enabled=true state=restarted 
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "6"
+  - name: Start Mysql Security Script In Redhat Client
+    shell: /bin/bash {{ code_path }}/mysql_security.sh
+    when: ansible_os_family == "RedHat"

@@ -1,0 +1,35 @@
+- name: Install Development Tools software
+  shell: /bin/bash {{ code_path }}/Development.sh
+  ignore_errors: True
+  when: ansible_os_family == "RedHat"
+- name: Install ntpdate Software
+  shell: yum install -y ntpdate
+  ignore_errors: True
+  when: ansible_os_family == "RedHat"
+- name: Install openssl-devel Software
+  shell: yum install -y openssl-devel
+  ignore_errors: True
+  when: ansible_os_family == "RedHat"
+- name: Use ntpdate time synchronization
+  shell: ntpdate {{ time_servers }} > /dev/null && hwclock -w
+  ignore_errors: True
+  when: ansible_os_family == "RedHat"
+- name: Install Chrony Software
+  yum: name=chrony state=present
+  when: ansible_os_family == "RedHat"
+- name: Chrony Time Server
+  shell: echo "server {{ time_servers }}" > /etc/chrony.conf
+  when: ansible_os_family == "RedHat"
+- name: Start Chronyd Service
+  service: name=chronyd enabled=true state=started
+  when: ansible_os_family == "RedHat"
+- name: Selinux Disable For CentOS/RHEL6
+  shell: setenforce 0 > /dev/null
+  ignore_errors: yes
+  when: ansible_os_family == "RedHat"
+- name: Firewalld Or Useless Services Disable For CentOS/RHEL7
+  shell: systemctl disable NetworkManager.service NetworkManager-dispatcher.service firewalld.service
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "7"
+- name: Firewalld Or Useless Services Disable For CentOS/RHEL6
+  shell: for LONG in `chkconfig --list|grep "3:on"|awk '{print $1}'|grep -vE "crond|network|sshd|rsyslog"`;do chkconfig $LONG off;done
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "6"

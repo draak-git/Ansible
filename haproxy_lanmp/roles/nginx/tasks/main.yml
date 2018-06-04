@@ -1,0 +1,12 @@
+---
+- yum: name=libtool-libs state=present
+- shell: mkdir -p /usr/local/services
+- shell: mkdir -p /data/soft
+- copy: src=/data/{{nginx}}.rpm dest=/data/soft/{{nginx}}.rpm
+- copy: src=/data/{{php}}.rpm dest=/data/soft/{{php}}.rpm
+- shell: rpm -qa| grep {{nginx}} || yum install -y nginx
+- shell: rpm -qa| grep {{php}} || yum install -y php
+- shell: chdir=/etc/ test -d nginx
+- shell: chdir=/etc/ test -d php.ini
+- shell: netstat -tnlp | grep nginx || /etc/init.d/nginx start
+- template: src=index.html.j2 dest=/data/htdocs/index.html

@@ -1,0 +1,15 @@
+mysql_basedir: /usr/local/mysql
+mysql_datadir: /data/mysql
+mysql_user: mysql
+mysql_user_id: 306
+mysql_database_user: root
+mysql_passwd: 'E4yR3Wnol34rfDuSFTCBAI'
+mysql_port: 3306
+mysql_server_id: 1
+mysql_sock: /tmp/mysql.sock
+mysql_charset: utf8
+mysql_collation: utf8_general_ci
+mysql_version: 10.1.20-linux-x86_64
+zabbix_user: zabbix
+zabbix_passwd: zabbix
+zabbix_server: 192.168.212.252

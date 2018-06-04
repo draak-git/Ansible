@@ -1,0 +1,12 @@
+libiconv_version: 1.15
+apache_version: 2.4.29
+apr_version: 1.5.2
+apr_util_version: 1.5.4
+pcre_version: 8.39
+apache_web_dir: /data/webroot/httpd
+apache_vhost: /data/webroot/httpd/vhost
+apache_log: /data/logs/httpd/
+apache_port: 80
+apache_user: www
+apache_user_id: 80
+serveradmin: cn-ll@outlook.com

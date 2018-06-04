@@ -1,0 +1,26 @@
+  - name: Create Mysql Install Dir
+    file: dest={{ mysql_datadir }} state=directory
+    when: ansible_os_family == "RedHat"
+  - name: Uncompression Mysql Software To Redhat Client
+    shell: tar xf {{ code_path }}/mariadb-{{ mysql_version }}.tar.gz -C {{ install_path }}/  && chown -R {{ mysql_user }}:{{ mysql_user }} {{ install_path }}/mariadb-{{ mysql_version }} {{ mysql_datadir }}
+    when: ansible_os_family == "RedHat"
+  - name: Modify Mysql Dir Permission In Redhat Client
+    file: path={{ item }} owner={{ mysql_user }} group={{ mysql_user }} mode=0755
+    with_items:
+    - "{{ mysql_datadir }}"
+    when: ansible_os_family == "RedHat"
+  - name: Initialize mysql Database To Redhat Client
+    shell: ln -s {{ install_path }}/mariadb-{{ mysql_version }} {{ mysql_basedir }} && {{ mysql_basedir }}/scripts/mysql_install_db --defaults-file=/etc/my.cnf --basedir={{ mysql_basedir }} --user={{ mysql_user }} --datadir={{ mysql_datadir }} --skip-name-resolve >> /dev/null 2>&1
+    when: ansible_os_family == "RedHat"
+  - name: Start Mysql Server In Redhat Client
+    shell: /etc/init.d/mysqld start && chkconfig --add mysqld
+    when: ansible_os_family == "RedHat"
+  - name: Map Mysql Library Include File In Redhat Client
+    shell: /sbin/ldconfig && source /etc/profile.d/mysql.sh && ln -s {{ mysql_basedir }}/include/mysql /usr/include/mysql
+    when: ansible_os_family == "RedHat"
+  - name: Start Mysql Security Script In Redhat Client
+    shell: /bin/bash {{ code_path }}/mysql_security.sh
+    when: ansible_os_family == "RedHat"
+  - name: Add Boot Start Mysql Service In Redhat Client
+    shell: chkconfig --level 345 mysqld on
+    when: ansible_os_family == "RedHat"

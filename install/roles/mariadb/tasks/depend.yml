@@ -1,0 +1,26 @@
+- name: Install MariaDB Software Depend In Redhat Client For 6
+  yum: name={{item}} state=present
+  with_items:
+    - cmake
+    - gcc
+    - gcc-c++
+    - ncurses-devel
+    - zlib-devel
+    - libxml2-devel
+#    - jemalloc-devel
+  ignore_errors: True
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "6"
+- name: Install MariaDB Software Depend In Redhat Client For 7
+  yum: name={{item}} state=present
+  with_items:
+    - cmake
+    - gcc
+    - gcc-c++
+    - ncurses-devel
+    - zlib-devel
+    - libxml2-devel
+    - jemalloc-devel
+    - autoconf
+#    - jemalloc-devel
+  ignore_errors: True
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "7"

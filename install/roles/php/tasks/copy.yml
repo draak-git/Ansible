@@ -1,0 +1,16 @@
+  - name: Copy Php Software To Redhat Client
+    copy: src=php-{{ php_version }}.tar.gz dest={{ code_path }}/php-{{ php_version }}.tar.gz owner=root group=root
+    when: ansible_os_family == "RedHat"
+  - name: Copy Php Start Script To Redhat Client For 6
+    template: src=php-fpm dest=/etc/init.d/php-fpm owner=root group=root mode=0755
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "6"
+  - name: Copy Php Start Script To Redhat Client For 7
+    template: src=php-fpm.service dest=/usr/lib/systemd/system/php-fpm.service owner=root group=root mode=0644
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "7"
+  - name: Copy Mod_fcgid Config To Redhat Client
+    template: src=httpd-fcgi.conf dest={{ httpd_conf }}/conf.d/ owner=root group=root mode=0644
+    when: ansible_os_family == "RedHat"
+  - name: Copy Apache Vhost Fcgi Config To Redhat Client
+    template: src=vhost.conf dest={{ httpd_conf }}/conf.d/vhost.conf owner={{ httpd_user }} group={{ httpd_user }} mode=0644
+    when: ansible_os_family == "RedHat"
+

@@ -1,0 +1,6 @@
+  - name: Uncompression Pcre Software In Redhat Client
+    shell: tar xf {{ code_path }}/pcre-{{ pcre_version }}.tar.gz -C {{ code_path }}/
+    when: ansible_os_family == "RedHat"
+  - name: Install Pcre Software In Redhat Client
+    shell: cd {{ code_path }}/pcre-{{ pcre_version }} && ./configure --prefix={{ install_path }}/pcre-{{ pcre_version }} && make -j {{ ansible_processor_vcpus }} && make install && ln -s {{ install_path }}/pcre-{{ pcre_version }} {{ install_path }}/pcre
+    when: ansible_os_family == "RedHat"

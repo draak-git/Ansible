@@ -1,0 +1,26 @@
+[epel]
+name=Extra Packages for Enterprise Linux $releasever - $basearch - Miller
+baseurl=http://192.168.212.5/epel/$releasever/$basearch
+#mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=epel-$releasever&arch=$basearch
+failovermethod=priority
+enabled=1
+gpgcheck=1
+gpgkey=http://192.168.212.5/epel/RPM-GPG-KEY-EPEL-$releasever
+
+[epel-debuginfo]
+name=Extra Packages for Enterprise Linux $releasever - $basearch - Debug - Miller
+baseurl=http://192.168.212.5/epel/$releasever/$basearch/debug
+#mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=epel-debug-$releasever&arch=$basearch
+failovermethod=priority
+enabled=0
+gpgkey=http://192.168.212.5/epel/RPM-GPG-KEY-EPEL-$releasever
+gpgcheck=1
+
+[epel-source]
+name=Extra Packages for Enterprise Linux $releasever - $basearch - Source - Miller
+baseurl=http://192.168.212.5/epel/$releasever/SRPMS
+#mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=epel-source-$releasever&arch=$basearch
+failovermethod=priority
+enabled=0
+gpgkey=http://192.168.212.5/epel/RPM-GPG-KEY-EPEL-$releasever
+gpgcheck=1

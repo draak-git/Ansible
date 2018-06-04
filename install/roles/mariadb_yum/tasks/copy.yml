@@ -1,0 +1,31 @@
+#  - name: Copy Mysql Software To Redhat Client
+#    copy: src=mariadb-{{ mysql_version }}.tar.gz dest={{ code_path }}/ owner=root group=root
+#    when: ansible_os_family == "RedHat"
+  - name: Copy MariaDB repo To Redhat Client
+    copy: src=mariadb-10.1.20.repo dest=/etc/yum.repos.d/ owner=root group=root
+    when: ansible_os_family == "RedHat"
+  - name: Create Mysql Group In Redhat Client
+    group: name={{ mysql_user }} system=yes gid={{ mysql_user_id }}
+    when: ansible_os_family == "RedHat"
+  - name: Create Apache User In Redhat Client
+    user: name={{ mysql_user }} system=yes group={{ mysql_user }} uid={{ mysql_user_id }}
+    when: ansible_os_family == "RedHat"
+#  - name: Copy Mysql Bin Script To Redhat Client
+#    template: src=mysql_bin.sh dest=/etc/profile.d/mysql.sh owner=root group=root mode=0644
+#    when: ansible_os_family == "RedHat"
+#  - name: Copy Mariadb-{{ mysql_version }} Library To Redhat Client
+#    template: src=mysql.conf dest=/etc/ld.so.conf.d/mysql.conf owner=root group=root mode=0644
+#    when: ansible_os_family == "RedHat"
+#  - name: Copy Mysql Start Script To Redhat Client
+#    template: src=mysql.server dest=/etc/init.d/mysqld owner=root group=root mode=0755
+#    when: ansible_os_family == "RedHat"
+  - name: Copy Mysql Security Script To Redhat Client
+    template: src=mysql_security.sh dest={{ code_path }}/mysql_security.sh owner=root group=root mode=0755
+    when: ansible_os_family == "RedHat"
+  - name: Copy Mysql Login ~/.my.cnf To Redhat Client
+    template: src=my.cnf.login dest=~/.my.cnf owner=root group=root mode=0640
+    when: ansible_os_family == "RedHat"
+#  - name: Copy Glibc-{{ glibc_version }} Library To Redhat Client
+#    template: src=glibc.conf dest=/etc/ld.so.conf.d/glibc.conf owner=root group=root mode=0644
+#    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "6"
+

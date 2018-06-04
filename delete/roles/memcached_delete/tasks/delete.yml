@@ -1,0 +1,13 @@
+  - name: Delete Memcached compression Software In Redhat Client
+    shell: rm -rf {{ soft_install_dir }}/memcached-{{ memcached_version }} {{ soft_install_dir }}/memcached /etc/profile.d/memcached.sh /etc/sysconfig/memcached /etc/init.d/memcached /usr/lib/systemd/system/memcached.service
+    when: ansible_os_family == "RedHat" and ansible_distribution_version|int >=6
+  - name: Install Memcached Software Depend In Redhat Client
+    yum: name={{item}} state=absent
+    with_items:
+    - cyrus-sasl-devel
+    - libevent-devel
+    when: ansible_os_family == "RedHat" and ansible_distribution_version|int >=6
+  - name: Delete Memcached service In Redhat Client For 7
+    shell: systemctl daemon-reload
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "7"
+

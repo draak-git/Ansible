@@ -1,0 +1,9 @@
+- name: Install Php Software Depend In Redhat Client
+  yum: name={{item}} state=present
+  with_items:
+  - libxml2-devel
+  - libmcrypt-devel
+  - mhash-devel
+  - bzip2-devel
+  - re2c
+  when: ansible_os_family == "RedHat"

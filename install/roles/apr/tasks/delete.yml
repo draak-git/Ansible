@@ -1,0 +1,4 @@
+  - name: Delete Apr Or Apr-util Uncompress In Redhat Client
+    shell: rm -rf {{ code_path }}/apr-{{ apr_version }} {{ code_path }}/apr-util-{{ apr_util_version }}
+    ignore_errors: True
+    when: ansible_os_family == "RedHat"

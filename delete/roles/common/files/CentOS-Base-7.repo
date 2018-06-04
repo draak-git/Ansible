@@ -1,0 +1,97 @@
+# CentOS-Base.repo
+#
+# The mirror system uses the connecting IP address of the client and the
+# update status of each mirror to pick mirrors that are updated to and
+# geographically close to the client.  You should use this for CentOS updates
+# unless you are manually picking other mirrors.
+#
+# If the mirrorlist= does not work for you, as a fall back you can try the
+# remarked out baseurl= line instead.
+#
+#
+
+[base]
+name=CentOS-$releasever - Base - Miller
+#mirrorlist=http://mirror.centos.org/?release=$releasever&arch=$basearch&repo=os
+baseurl=http://192.168.212.5/centos/$releasever/os/$basearch/
+enabled=1
+gpgcheck=1
+gpgkey=http://192.168.212.5/centos/RPM-GPG-KEY-CentOS-$releasever
+
+#released updates
+[updates]
+name=CentOS-$releasever - Updates - Miller
+# mirrorlist=http://mirror.centos.org/?release=$releasever&arch=$basearch&repo=updates
+baseurl=http://192.168.212.5/centos/$releasever/updates/$basearch/
+enabled=1
+gpgcheck=1
+gpgkey=http://192.168.212.5/centos/RPM-GPG-KEY-CentOS-$releasever
+
+#additional packages that may be useful
+[extras]
+name=CentOS-$releasever - Extras - Miller
+# mirrorlist=http://mirror.centos.org/?release=$releasever&arch=$basearch&repo=extras
+baseurl=http://192.168.212.5/centos/$releasever/extras/$basearch/
+enabled=1
+gpgcheck=1
+gpgkey=http://192.168.212.5/centos/RPM-GPG-KEY-CentOS-$releasever
+
+#additional packages that extend functionality of existing packages
+[centosplus]
+name=CentOS-$releasever - Plus - Miller
+# mirrorlist=http://mirror.centos.org/?release=$releasever&arch=$basearch&repo=centosplus
+baseurl=http://192.168.212.5/centos/$releasever/centosplus/$basearch/
+enabled=1
+gpgcheck=1
+gpgkey=http://192.168.212.5/centos/RPM-GPG-KEY-CentOS-$releasever
+
+# Xen
+[centos-virt-xen]
+name=CentOS-$releasever - xen
+baseurl=http://192.168.212.5/centos/$releasever/virt/$basearch/xen/
+gpgcheck=1
+enabled=0
+gpgkey=http://192.168.212.5/centos/RPM-GPG-KEY-CentOS-SIG-Virtualization
+
+[centos-virt-xen46]
+name=CentOS-$releasever - xen46
+baseurl=http://192.168.212.5/centos/$releasever/virt/$basearch/xen46/
+gpgcheck=1
+enabled=0
+gpgkey=http://192.168.212.5/centos/RPM-GPG-KEY-CentOS-SIG-Virtualization
+
+# Ovirt
+[centos-ovirt35]
+name=CentOS-$releasever - oVirt 3.5
+baseurl=http://192.168.212.5/centos/$releasever/virt/$basearch/ovirt-3.5/
+gpgcheck=1
+enabled=0
+gpgkey=http://192.168.212.5/centos/RPM-GPG-KEY-CentOS-SIG-Virtualization
+
+[centos-ovirt36]
+name=CentOS-$releasever - oVirt 3.6
+baseurl=http://192.168.212.5/centos/$releasever/virt/$basearch/ovirt-3.6/
+gpgcheck=1
+enabled=0
+gpgkey=http://192.168.212.5/centos/RPM-GPG-KEY-CentOS-SIG-Virtualization
+
+[centos-ovirt40]
+name=CentOS-$releasever - oVirt 4.0
+baseurl=http://192.168.212.5/centos/$releasever/virt/$basearch/ovirt-4.0/
+gpgcheck=1
+enabled=0
+gpgkey=http://192.168.212.5/centos/RPM-GPG-KEY-CentOS-SIG-Virtualization
+
+[centos-ovirt41]
+name=CentOS-$releasever - oVirt 4.1
+baseurl=http://192.168.212.5/centos/$releasever/virt/$basearch/ovirt-4.1/
+gpgcheck=1
+enabled=0
+gpgkey=http://192.168.212.5/centos/RPM-GPG-KEY-CentOS-SIG-Virtualization
+
+[centos-qemu-ev]
+name=CentOS-$releasever - QEMU EV
+baseurl=http://192.168.212.5/centos/$releasever/virt/$basearch/kvm-common/
+gpgcheck=1
+enabled=0
+gpgkey=http://192.168.212.5/centos/RPM-GPG-KEY-CentOS-SIG-Virtualization

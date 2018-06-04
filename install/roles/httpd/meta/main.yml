@@ -1,0 +1,13 @@
+galaxy_info:
+  author: Liu Long
+  description: Install Apache
+  license: MIT
+  min_ansible_version: 2.5.2
+  platforms:
+  - name: CentOS
+    versions:
+    - 6
+    - 7
+  categories:
+  - Service
+dependencies: []

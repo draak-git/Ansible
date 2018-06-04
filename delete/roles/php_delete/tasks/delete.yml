@@ -1,0 +1,13 @@
+  - name: Delete Php Service In RedHat Client For 6
+    shell: /etc/init.d/php-fpm stop && chkconfig --del php-fpm && rm -rf /etc/init.d/php-fpm
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "6"
+  - name: Delete Php Service In RedHat Client For 7
+    shell: systemctl stop php-fpm && systemctl disable php-fpm && rm -rf /usr/lib/systemd/system/php-fpm.service && systemctl daemon-reload
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "7"
+  - name: Delete Php Soft In RedHat Client
+    shell: rm -rf {{ soft_install_dir }}/php-{{ php_version }} {{ soft_install_dir }}/php
+    when: ansible_os_family == "RedHat" and ansible_distribution_version|int >=6
+  - name: Delete Php User In Redhat Client
+    shell: userdel {{ php_user }} removes={{ code_src_dir }}/httpd-{{ apache_version }}
+    ignore_errors: yes
+    when: ansible_os_family == "RedHat" and ansible_distribution_version|int >=6

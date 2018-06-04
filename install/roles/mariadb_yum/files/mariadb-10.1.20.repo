@@ -1,0 +1,7 @@
+# MariaDB 10.2.13 CentOS repository list
+# http://downloads.mariadb.org/mariadb/repositories/
+[mariadb]
+name = MariaDB-10.1.20
+baseurl = http://192.168.212.5/mariadb/10.1.20/$releasever
+gpgkey=http://192.168.212.5/public/RPM-GPG-KEY/RPM-GPG-KEY-MariaDB
+gpgcheck=1
