@@ -10,9 +10,11 @@
   gather_facts: True
   roles:
      - mysql
+#     - mysql_boost
 #     - mariadb
 #     - mariadb_yum
-#     - master_slave
+#     - mysql_master
+#     - mysql_slave
 
 #- hosts: memcache
 #  remote_user: root

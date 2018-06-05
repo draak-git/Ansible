@@ -1,0 +1,30 @@
+  - name: Backup Original YUM Source
+    shell: mkdir -p /etc/yum.repos.d/backup && mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/backup
+    when: ansible_os_family == "RedHat"
+  - name: Copy CentOS Base Source To CentOS/RedHat
+    template: src=CentOS-Base-{{ ansible_distribution_major_version }}.repo dest=/etc/yum.repos.d/CentOS-Base-{{ ansible_distribution_major_version }}.repo
+    when: ansible_os_family == "RedHat"
+  - name: Copy CentOS Epel Source To CentOS/RedHat
+    template: src=CentOS-epel.repo dest=/etc/yum.repos.d/CentOS-epel.repo
+    when: ansible_os_family == "RedHat"
+  - name: Copy MySQL Software To Redhat Client
+    copy: src=mysql-boost-{{ mysql_version }}.tar.gz dest={{ code_path }}/ owner=root group=root
+    when: ansible_os_family == "RedHat"
+  - name: Create MySQL Group In Redhat Client
+    group: name={{ mysql_user }} system=yes gid={{ mysql_user_id }}
+    when: ansible_os_family == "RedHat"
+  - name: Create MySQL User In Redhat Client
+    user: name={{ mysql_user }} system=yes group={{ mysql_user }} uid={{ mysql_user_id }}
+    when: ansible_os_family == "RedHat"
+  - name: Copy MySQL Security Script To Redhat Client
+    template: src=mysql_security.sh dest={{ code_path }}/mysql_security.sh owner=root group=root mode=0755
+    when: ansible_os_family == "RedHat"
+  - name: Copy MySQL Mkdir Script To RedHat Client
+    template: src=mysql_mkdir.sh dest={{ code_path }}/mysql_mkdir.sh owner=root group=root mode=0755
+    when: ansible_os_family == "RedHat"
+  - name: Copy MySQL Server Script To RedHat Client
+    template: src=mysqld dest=/etc/init.d/{{ mysql_port }} owner=root group=root mode=0755
+    when: ansible_os_family == "RedHat"
+  - name: Copy MySQL PATH Script To RedHat Client
+    template: src=mysql.sh dest=/etc/profile.d/mysql.sh owner=root group=root mode=0755
+    when: ansible_os_family == "RedHat"

@@ -1,0 +1,15 @@
+data_path: /data
+mysql_basedir: /data/3306
+mysql_datadir: /data/3306/data
+mysql_user: mysql
+mysql_user_id: 306
+mysql_database_user: root
+mysql_passwd: 'E4yR3Wnol34rfDuSFTCBAI'
+mysql_port: 3306
+mysql_server_id: 1
+mysql_charset: utf8
+mysql_collation: utf8_general_ci
+mysql_version: 5.6.35
+zabbix_user: zabbix
+zabbix_passwd: zabbix
+zabbix_server: 192.168.212.252

@@ -1,0 +1,4 @@
+  - name: Delete MySQL compression Software In Redhat Client
+    shell: rm -rf {{ code_path }}/mysql-{{ mysql_version }}
+    ignore_errors: yes
+    when: ansible_os_family == "RedHat"

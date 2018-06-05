@@ -12,6 +12,7 @@
     - openssl-devel
     - ncurses-devel
     - autoconf
+    - numactl
   ignore_errors: True
   when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "6"
 - name: Install MySQL Software Depend In Redhat Client For 7
@@ -28,5 +29,6 @@
     - openssl-devel
     - ncurses-devel
     - autoconf
+    - numactl
   ignore_errors: True
   when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "7"

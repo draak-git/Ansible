@@ -1,0 +1,25 @@
+  - name: Create And Modify MySQL Run,Tmp,Log Dir Permission In Redhat Client
+    shell: /bin/bash {{ code_path }}/mysql_mkdir.sh 
+    when: ansible_os_family == "RedHat"
+  - name: Uncompression MySQL Software To Redhat Client
+    shell: tar xf {{ code_path }}/mysql-{{ mysql_version }}.tar.gz -C  {{ code_path }}/
+    ignore_errors: True
+    when: ansible_os_family == "RedHat"
+  - name: Cmake Install MySQL Database To Redhat Client
+    shell: cd {{ code_path }}/mysql-{{ mysql_version }} && cmake -DCMAKE_INSTALL_PREFIX={{ mysql_basedir }} -DINSTALL_DATADIR={{ mysql_datadir }} -DDEFAULT_CHARSET={{ mysql_charset }} -DDEFAULT_COLLATION={{ mysql_collation }} -DEXTRA_CHARSETS=all -DWITH_SSL=yes -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1 -DWITH_MYISAM_STORAGE_ENGINE=0 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_ARCHIVE_STORAGE_ENGINE=1 -DWITH_BLACKHOLE_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1 -DWITH_PARTITION_STORAGE_ENGINE=1 -DMYSQL_UNIX_ADDR={{ mysql_basedir }}/run/{{ mysql_port }}.sock -DMYSQL_TCP_PORT={{ mysql_port }} -DENABLED_LOCAL_INFILE=1 -DSYSCONFDIR={{ mysql_basedir }}/etc -DWITH_READLINE=on && make -j {{ ansible_processor_vcpus }} && make install
+    when: ansible_os_family == "RedHat"
+  - name: Copy MySQL Config In RedHat Client
+    template: src=my.cnf dest={{ mysql_basedir }}/etc/my.cnf owner={{ mysql_user }} group={{ mysql_user }} mode=0644
+    when: ansible_os_family == "RedHat"
+  - name: Initialize MySQL Database To Redhat Client
+    shell: touch {{ mysql_basedir }}/log/error.log && chown -R {{ mysql_user }}.{{ mysql_user }} {{ mysql_basedir }} && cd {{ mysql_basedir }} && scripts/mysql_install_db --defaults-file={{ mysql_basedir }}/etc/my.cnf --basedir={{ mysql_basedir }} --user={{ mysql_user }} --datadir={{ mysql_datadir }} --skip-name-resolve >> /dev/null 2>&1 
+    when: ansible_os_family == "RedHat"
+  - name: Start MySQL Server In Redhat Client
+    shell: /etc/init.d/{{ mysql_port }} start && chkconfig --add {{ mysql_port }}
+    when: ansible_os_family == "RedHat"
+  - name: Start MySQL Security Script In Redhat Client
+    shell: /bin/bash {{ code_path }}/mysql_security.sh
+    when: ansible_os_family == "RedHat"
+  - name: Add Boot Start MySQL Service In Redhat Client
+    shell: chkconfig --level 345 {{ mysql_port }} on
+    when: ansible_os_family == "RedHat"
