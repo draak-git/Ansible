@@ -12,7 +12,7 @@
     template: src=my.cnf dest={{ mysql_basedir }}/etc/my.cnf owner={{ mysql_user }} group={{ mysql_user }} mode=0644
     when: ansible_os_family == "RedHat"
   - name: Initialize MySQL Database To Redhat Client
-    shell: touch {{ mysql_basedir }}/log/error.log && chown -R {{ mysql_user }}.{{ mysql_user }} {{ mysql_basedir }} && cd {{ mysql_basedir }} && scripts/mysql_install_db --defaults-file={{ mysql_basedir }}/etc/my.cnf --basedir={{ mysql_basedir }} --user={{ mysql_user }} --datadir={{ mysql_datadir }} --skip-name-resolve >> /dev/null 2>&1 
+    shell: touch {{ mysql_basedir }}/log/error.log && chown -R {{ mysql_user }}.{{ mysql_user }} {{ mysql_basedir }} && cd {{ mysql_basedir }} && {{ mysql_basedir }}/bin/mysqld --initialize --defaults-file={{ mysql_basedir }}/etc/my.cnf --basedir={{ mysql_basedir }} --user={{ mysql_user }} --datadir={{ mysql_datadir }} --skip-name-resolve >> /dev/null 2>&1 
     when: ansible_os_family == "RedHat"
   - name: Start MySQL Server In Redhat Client
     shell: /etc/init.d/{{ mysql_port }} start && chkconfig --add {{ mysql_port }}
