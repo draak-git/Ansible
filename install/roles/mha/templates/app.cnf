@@ -1,0 +1,31 @@
+[server default]
+user = "{{ mysql_user }}"
+password = "{{ mysql_passwd }}"
+ssh_user = "{{ ssh_user }}"
+repl_user = "{{ repl_user }}"
+repl_password = "{{ repl_password }}"
+ping_interval = "1"
+ping_type = "SELECT"
+manager_workdir = "{{ manager_path }}/etc/app"
+remote_workdir = "{{ manager_path }}/etc/app"
+manager_log = "{{ manager_path }}/log/manager.log"
+master_binlog_dir = "{{ mysql_path }}/log/binlog"
+master_ip_failover_script = "{{ manager_path }}/etc/master_ip_failover"
+master_ip_online_change_script = "{{ manager_path }}/etc/master_ip_failover"
+shutdown_script = ""
+report_script = ""
+#check_repl_delay = 0
+
+[server1]
+hostname={{ hostname1 }}
+port={{ mysql_port1 }}
+master_binlog_dir="{{ mysql_path }}/log/binlog"
+candidate_master=1
+ignore_fail=1
+
+[server2]
+hostname={{ hostname2 }}
+port={{ mysql_port1 }}
+master_binlog_dir="{{ mysql_path }}/log/binlog"
+candidate_master=1
+ignore_fail=1

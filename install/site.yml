@@ -9,8 +9,8 @@
   remote_user: root
   gather_facts: True
   roles:
-#     - mysql
-     - mysql_boost
+     - mysql
+#     - mysql_boost
 #     - mariadb
 #     - mariadb_yum
 #     - mysql_master
